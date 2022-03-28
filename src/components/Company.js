@@ -13,12 +13,9 @@ function Company() {
   let navigate = useNavigate();
 
   useEffect(() => {
-    // console.log(customerChoice);
     let DataFromStorage = localStorage.getItem("Logins State");
     let oldDataRes = JSON.parse(DataFromStorage);
     if (oldDataRes) {
-      // console.log(oldDataRes);
-
       if (oldDataRes.loginIn) {
         setOldData(true);
       }
@@ -45,6 +42,28 @@ function Company() {
     }
   }, [oldData]);
 
+  let sendData = async () => {
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/company",
+        {
+          SNI3Numbers: customerChoice,
+        },
+        { withCredentials: true }
+      );
+
+      //   console.log(res.status);
+      if (res.statusText === "OK") {
+        // dispatch(loginIn(true))
+
+        console.log(res);
+      }
+    } catch (err) {
+      console.log(err);
+      navigate("/login");
+    }
+  };
+
   function toggleAll(source) {
     let selectAll = document.getElementsByName(`selectAll`);
 
@@ -60,8 +79,6 @@ function Company() {
           selectAll[i].value.length > 2
         ) {
           setCustomerChoice((prevState) => [...prevState, selectAll[i].value]);
-
-          //     checkClass[i].style.display="block";
         }
       }
       if (!source.checked) {
@@ -86,7 +103,7 @@ function Company() {
         if (customerChoice.indexOf(checkClass[i].childNodes[0].value) === -1) {
           setCustomerChoice((prevState) => [
             ...prevState,
-            checkClass[i].childNodes[0].value,
+            Number(checkClass[i].childNodes[0].value),
           ]);
 
           checkClass[i].style.display = "block";
@@ -96,7 +113,7 @@ function Company() {
         checkClass[i].style.display = "none";
         setCustomerChoice((prevState) => [
           ...prevState.filter(
-            (value) => value !== checkClass[i].childNodes[0].value
+            (value) => value !==Number( checkClass[i].childNodes[0].value)
           ),
         ]);
       }
@@ -105,11 +122,11 @@ function Company() {
 
   function checkHandle(source) {
     if (source.checked) {
-      setCustomerChoice((prevState) => [...prevState, source.value]);
+      setCustomerChoice((prevState) => [...prevState, Number(source.value)]);
     }
     if (!source.checked) {
       setCustomerChoice((prevState) => [
-        ...prevState.filter((value) => value !== source.value),
+        ...prevState.filter((value) => value !== Number(source.value)),
       ]);
     }
   }
@@ -122,11 +139,8 @@ function Company() {
         type={"checkbox"}
         id={"selectAll"}
         label="Select All"
-
-        style={{ marginBottom: 20 ,marginTop: 40, fontWeight: "bold"}}
-
+        style={{ marginBottom: 20, marginTop: 40, fontWeight: "bold" }}
         onClick={(e) => toggleAll(e.target)}
-
       />
       {DBdata.map(({ Denomination, branch, SNI2Digits, SNI3Digits }, index) => {
         return (
@@ -160,6 +174,15 @@ function Company() {
           </Form>
         );
       })}
+      <br />
+
+      <button type="button" onClick={sendData}>
+        {" "}
+        Sök företag inom markerade branscher
+      </button>
+      <br />
+      <br />
+      <br />
 
       <button
         type="button"

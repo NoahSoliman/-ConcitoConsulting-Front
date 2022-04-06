@@ -4,15 +4,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect } from "react";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 
-import { useSelector, useDispatch } from "react-redux";
 
 function App() {
-  const dispatch = useDispatch();
 
-  const reducerState = useSelector((state) => {
-    return state;
-  });
 
+  
   let navigate = useNavigate();
 
   useEffect(() => {

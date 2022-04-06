@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Register from "./components/Register";
 import Login from "./components/login";
 import Company from "./components/Company";
+import Companies from "./components/Companies";
 import NotFound from "./components/NotFound.jsx";
 import Test from "./components/Test";
 import { Provider } from "react-redux";
@@ -29,6 +30,7 @@ ReactDOM.render(
           <Route path="registration" element={<Register />} />
           <Route path="test" element={<Test />} />
           <Route path="company" element={<Company />} />
+          <Route path="companies/:id" element={<Companies/>}  />
         </Routes>
       </BrowserRouter>
     </Provider>

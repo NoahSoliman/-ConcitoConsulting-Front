@@ -1,11 +1,27 @@
 const reducer = (state = {}, action) => {
   switch (action.type) {
 
-    case "loginIn":
+    case "selectedCompanies":
       return {
         ...state,
-            logginState: action.data,
+       companies: action.data,
+       
         }
+
+        case "selectedPage":
+          return {
+            ...state,
+           page: action.data,
+           
+            }
+
+        case "setCustomerBranchChoice":
+          return {
+            ...state,
+           customerBranchChoice: action.data,
+           
+            }
+    
 
   
     default:

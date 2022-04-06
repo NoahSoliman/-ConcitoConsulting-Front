@@ -4,13 +4,29 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
+import { useSelector, useDispatch } from "react-redux";
+
+import {
+  selectedPage,
+  selectedCompanies,
+  setCustomerBranchChoice,
+} from "../action/action";
 
 function Company() {
   const [DBdata, setDBdata] = useState([]);
   const [oldData, setOldData] = useState("");
   const [customerChoice, setCustomerChoice] = useState([]);
+  // const [selectedCompanies, setSelectedCompanies] = useState([]);
 
   let navigate = useNavigate();
+
+  const dispatch = useDispatch();
+
+  const reducerState = useSelector((state) => {
+    return state;
+  });
+
+  // console.log(reducerState)
 
   useEffect(() => {
     let DataFromStorage = localStorage.getItem("Logins State");
@@ -43,37 +59,49 @@ function Company() {
   }, [oldData]);
 
   let sendData = async () => {
-    try {
-      const res = await axios.post(
-        "http://localhost:3000/api/company",
-        {
-          SNI3Numbers: customerChoice,
-        },
-        { withCredentials: true }
-      );
+    dispatch(setCustomerBranchChoice(customerChoice));
+        dispatch(selectedPage(1));
+        navigate(`/companies/${1}`);
 
-      //   console.log(res.status);
-      if (res.statusText === "OK") {
-        // dispatch(loginIn(true))
 
-        console.log(res);
-      }
-    } catch (err) {
-      console.log(err);
-      navigate("/login");
-    }
+
+    // try {
+
+    //   const res = await axios.post(
+    //     "http://localhost:3000/api/company/1/",
+    //     {
+    //       SNI3Numbers: customerChoice,
+    //     },
+    //     { withCredentials: true }
+    //   );
+
+    //   //   console.log(res.status);
+    //   if (res.statusText === "OK") {
+    //     // dispatch(loginIn(true))
+
+    //     console.log(res.data);
+    //     // setSelectedCompanies(res.data)
+    //     dispatch(selectedCompanies(res.data));
+    //     dispatch(selectedPage(1));
+
+    //     navigate(`/companies/1`);
+    //   }
+    // } catch (err) {
+    //   console.log(err);
+    //   navigate("/login");
+    // }
   };
 
   function toggleAll(source) {
     let selectAll = document.getElementsByName(`selectAll`);
 
-    console.log(selectAll);
+    // console.log(selectAll);
 
     for (let i = 0; i < selectAll.length; i++) {
       selectAll[i].checked = source.checked;
 
       if (source.checked) {
-        console.log(selectAll[i].value.length);
+        // console.log(selectAll[i].value.length);
         if (
           customerChoice.indexOf(selectAll[i].value) === -1 &&
           selectAll[i].value.length > 2
@@ -93,8 +121,8 @@ function Company() {
     let checkClass = document.getElementsByClassName(`${theClass}`);
     let selectAll = document.getElementsByName(`selectAll`);
 
-    console.log(selectAll);
-    console.log(checkClass);
+    // console.log(selectAll);
+    // console.log(checkClass);
 
     for (let i = 0; i < checkClass.length; i++) {
       checkClass[i].childNodes[0].checked = source.checked;
@@ -113,7 +141,7 @@ function Company() {
         checkClass[i].style.display = "none";
         setCustomerChoice((prevState) => [
           ...prevState.filter(
-            (value) => value !==Number( checkClass[i].childNodes[0].value)
+            (value) => value !== Number(checkClass[i].childNodes[0].value)
           ),
         ]);
       }
@@ -134,7 +162,10 @@ function Company() {
   return (
     <div>
       <h1> company</h1>
-
+      <button type="button" onClick={sendData}>
+        {" "}
+        Sök företag inom markerade branscher
+      </button>
       <Form.Check
         type={"checkbox"}
         id={"selectAll"}

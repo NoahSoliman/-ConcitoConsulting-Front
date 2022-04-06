@@ -2,8 +2,7 @@ import "./Register.css";
 import { useState, useEffect } from "react";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { loginIn } from "../action/action.jsx";
-import { useSelector, useDispatch } from "react-redux";
+// import { useSelector, useDispatch } from "react-redux";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -11,14 +10,14 @@ function Register() {
   const [message, setMessage] = useState("");
 
   let navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   useEffect(() => {
     let DataFromStorage = localStorage.getItem("Logins State");
     let oldData = JSON.parse(DataFromStorage);
 
     if (oldData) {
-      console.log(oldData);
+      // console.log(oldData);
       if (oldData.loginIn) {
         navigate("/company");
       }
@@ -47,7 +46,7 @@ function Register() {
 
         localStorage.setItem("Logins State", JSON.stringify({ loginIn: true }));
 
-        console.log(res);
+        // console.log(res);
         navigate("/company")
       }
 

@@ -60,10 +60,8 @@ function Company() {
 
   let sendData = async () => {
     dispatch(setCustomerBranchChoice(customerChoice));
-        dispatch(selectedPage(1));
-        navigate(`/companies/${1}`);
-
-
+    dispatch(selectedPage(1));
+    navigate(`/companies/${1}`);
 
     // try {
 
@@ -93,25 +91,32 @@ function Company() {
   };
 
   function toggleAll(source) {
-    let selectAll = document.getElementsByName(`selectAll`);
+    let selectAllClass = document.getElementsByClassName(`form-check-input`);
 
-    // console.log(selectAll);
+    let selectAllName = document.getElementsByName(`selectAll`);
 
-    for (let i = 0; i < selectAll.length; i++) {
-      selectAll[i].checked = source.checked;
+    // console.log(selectAllClass);
+
+    for (let i = 0; i < selectAllClass.length; i++) {
+      selectAllClass[i].checked = source.checked;
 
       if (source.checked) {
-        // console.log(selectAll[i].value.length);
-        if (
-          customerChoice.indexOf(selectAll[i].value) === -1 &&
-          selectAll[i].value.length > 2
-        ) {
-          setCustomerChoice((prevState) => [...prevState, selectAll[i].value]);
+        // console.log(!selectAllName[i]);
+        if (selectAllName[i]) {
+          if (customerChoice.indexOf(selectAllName[i].value) === -1) {
+            setCustomerChoice((prevState) => [
+              ...prevState,
+              Number(selectAllName[i].value),
+            ]);
+          }
         }
       }
+
       if (!source.checked) {
         setCustomerChoice((prevState) => [
-          ...prevState.filter((value) => value !== selectAll[i].value),
+          ...prevState.filter(
+            (value) => value !== Number(selectAllName[i].value)
+          ),
         ]);
       }
     }
@@ -119,10 +124,9 @@ function Company() {
 
   function toggle(source, theClass) {
     let checkClass = document.getElementsByClassName(`${theClass}`);
-    let selectAll = document.getElementsByName(`selectAll`);
 
-    // console.log(selectAll);
     // console.log(checkClass);
+    // console.log(theClass);
 
     for (let i = 0; i < checkClass.length; i++) {
       checkClass[i].childNodes[0].checked = source.checked;
@@ -149,6 +153,8 @@ function Company() {
   }
 
   function checkHandle(source) {
+    // console.log("source");
+    // console.log(source);
     if (source.checked) {
       setCustomerChoice((prevState) => [...prevState, Number(source.value)]);
     }
@@ -181,7 +187,6 @@ function Company() {
                 type={"checkbox"}
                 id={SNI2Digits}
                 label={Denomination}
-                name={"selectAll"}
                 value={SNI2Digits}
                 onClick={(e) => toggle(e.target, SNI2Digits)}
               />
@@ -190,7 +195,7 @@ function Company() {
             )}
             {branch ? (
               <Form.Check
-                className={SNI3Digits.slice(0, -1)}
+                className={SNI3Digits.toString().slice(0, -1)}
                 type={"checkbox"}
                 id={SNI3Digits}
                 label={branch}

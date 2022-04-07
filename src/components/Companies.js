@@ -51,13 +51,6 @@ function Companies(props) {
     "Stad",
     "FinancialYear",
     "Resultat",
-    "",
-    "",
-    "",
-
-
-
-
 
   ]);
 
@@ -173,10 +166,10 @@ function Companies(props) {
           <thead>
             <tr>
               <th>#</th>
-             {/* {Object.keys(allCompanies[0]).map((key, index) => (
+              {allTaHead.map((title, index) => (
                   
-                <th key={index}>{key}</th>
-              ))}  */}
+                <th key={index}>{title}</th>
+              ))}  
             </tr>
           </thead>
           <tbody>

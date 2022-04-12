@@ -1,0 +1,13 @@
+.table-responsive {
+
+    width: 90%;
+    margin: 0 auto;
+    font-size: 12px;
+}
+
+.pagination-container {
+
+    /* background-color: red; */
+    width:400px;
+    margin:50px auto;
+}

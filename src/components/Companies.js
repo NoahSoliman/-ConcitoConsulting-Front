@@ -173,75 +173,31 @@ function Companies(props) {
     let prioElement = document.getElementById(`${OrganizationOrgnr}prio`);
     let processElement = document.getElementById(`${OrganizationOrgnr}process`);
     let notProcesState = processElement.checked;
-
-    if (notProcesState) prioElement.checked = false;
-
-    const found = extraOptions.find(
-      (element) => element.OrganizationOrgnr === OrganizationOrgnr
-    );
-    if (found) {
-      found.notProcesseState = processElement.checked;
-      found.prioState = prioElement.checked;
-
-      if (notProcesState) {
-        setExtraOptions((prev) => [
-          ...prev.filter(
-            (item) => item.OrganizationOrgnr !== OrganizationOrgnr
-          ),
-          found,
-        ]);
-      } else if (!notProcesState && found.note) {
-        setExtraOptions((prev) => [
-          ...prev.filter(
-            (item) => item.OrganizationOrgnr !== OrganizationOrgnr
-          ),
-          {
-            OrganizationOrgnr: OrganizationOrgnr,
-            note: found.note,
-          },
-        ]);
-      } else if (!notProcesState && !found.note) {
-        setExtraOptions((prev) => [
-          ...prev.filter(
-            (item) => item.OrganizationOrgnr !== OrganizationOrgnr
-          ),
-        ]);
-      }
-    } else {
-      setExtraOptions((prev) => [
-        ...prev,
-        {
-          OrganizationOrgnr: OrganizationOrgnr,
-          notProcesseState: processElement.checked,
-          prioState: prioElement.checked,
-        },
-      ]);
-    }
-  };
-
-  let clickHandPrio = (e, OrganizationOrgnr, index) => {
-    let processElement = document.getElementById(`${OrganizationOrgnr}process`);
-    let prioElement = document.getElementById(`${OrganizationOrgnr}prio`);
     let prioStete = prioElement.checked;
 
-    if (prioStete) processElement.checked = false;
+   
 
+    if (notProcesState && prioStete) {
+      processElement.checked = false;
+      prioElement.checked = false;
+
+      e.target.checked = true; }
+    // sssssss
     const found = extraOptions.find(
       (element) => element.OrganizationOrgnr === OrganizationOrgnr
     );
-
     if (found) {
       found.notProcesseState = processElement.checked;
       found.prioState = prioElement.checked;
 
-      if (prioStete) {
+      if (notProcesState || prioStete) {
         setExtraOptions((prev) => [
           ...prev.filter(
             (item) => item.OrganizationOrgnr !== OrganizationOrgnr
           ),
           found,
         ]);
-      } else if (!prioStete && found.note) {
+      } else if ((!notProcesState || prioStete) && found.note) {
         setExtraOptions((prev) => [
           ...prev.filter(
             (item) => item.OrganizationOrgnr !== OrganizationOrgnr
@@ -251,7 +207,7 @@ function Companies(props) {
             note: found.note,
           },
         ]);
-      } else if (!prioStete && !found.note) {
+      } else if ((!notProcesState || prioStete) && !found.note) {
         setExtraOptions((prev) => [
           ...prev.filter(
             (item) => item.OrganizationOrgnr !== OrganizationOrgnr
@@ -269,6 +225,57 @@ function Companies(props) {
       ]);
     }
   };
+
+  // let clickHandPrio = (e, OrganizationOrgnr, index) => {
+  //   let processElement = document.getElementById(`${OrganizationOrgnr}process`);
+  //   let prioElement = document.getElementById(`${OrganizationOrgnr}prio`);
+  //   let prioStete = prioElement.checked;
+
+  //   if (prioStete) processElement.checked = false;
+
+  //   const found = extraOptions.find(
+  //     (element) => element.OrganizationOrgnr === OrganizationOrgnr
+  //   );
+
+  //   if (found) {
+  //     found.notProcesseState = processElement.checked;
+  //     found.prioState = prioElement.checked;
+
+  //     if (prioStete) {
+  //       setExtraOptions((prev) => [
+  //         ...prev.filter(
+  //           (item) => item.OrganizationOrgnr !== OrganizationOrgnr
+  //         ),
+  //         found,
+  //       ]);
+  //     } else if (!prioStete && found.note) {
+  //       setExtraOptions((prev) => [
+  //         ...prev.filter(
+  //           (item) => item.OrganizationOrgnr !== OrganizationOrgnr
+  //         ),
+  //         {
+  //           OrganizationOrgnr: OrganizationOrgnr,
+  //           note: found.note,
+  //         },
+  //       ]);
+  //     } else if (!prioStete && !found.note) {
+  //       setExtraOptions((prev) => [
+  //         ...prev.filter(
+  //           (item) => item.OrganizationOrgnr !== OrganizationOrgnr
+  //         ),
+  //       ]);
+  //     }
+  //   } else {
+  //     setExtraOptions((prev) => [
+  //       ...prev,
+  //       {
+  //         OrganizationOrgnr: OrganizationOrgnr,
+  //         notProcesseState: processElement.checked,
+  //         prioState: prioElement.checked,
+  //       },
+  //     ]);
+  //   }
+  // };
 
   let clickHandleNote = (e, OrganizationOrgnr, index) => {
     let note = e.target.value;
@@ -462,7 +469,7 @@ sedan jag kan använda find för att hitta varje företag och lägga till dessa 
                           type={"checkbox"}
                           id={OrganizationOrgnr + "prio"}
                           onClick={(e) =>
-                            clickHandPrio(e, OrganizationOrgnr, index)
+                            clickHandleProcess(e, OrganizationOrgnr, index)
                           }
 
                           //   checked={prioChecket}

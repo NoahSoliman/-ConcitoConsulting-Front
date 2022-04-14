@@ -7,6 +7,8 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import { Form, Pagination, PageItem, Table, InputGroup } from "react-bootstrap";
+import CheckOptions from "./CheckOptions";
+import PageCompaniesState from "./PageCompaniesState";
 
 import {
   selectedPage,
@@ -27,6 +29,7 @@ function Companies(props) {
   const [allCompanies, setAllCompanies] = useState([]);
   const [process, setProcess] = useState(false);
   const [prioChecket, setPrioChecket] = useState(false);
+  const [pageCompaniesState, setPageCompaniesState] = useState([]);
   const [allTaHead, setAllTaHead] = useState([
     // "OrganizationOrgnr",
     "OrganizationName",
@@ -113,7 +116,7 @@ function Companies(props) {
 
   useEffect(() => {
     let items = [];
-
+    // för att inte visa mer än tio sidor nummer "maxNum"
     if (totalPage >= maxNum) {
       for (let number = num; number <= maxNum; number++) {
         items.push(
@@ -172,16 +175,18 @@ function Companies(props) {
   let clickHandleProcess = (e, OrganizationOrgnr, index) => {
     let prioElement = document.getElementById(`${OrganizationOrgnr}prio`);
     let processElement = document.getElementById(`${OrganizationOrgnr}process`);
+
+    console.log(prioElement);
+    console.log(processElement);
     let notProcesState = processElement.checked;
     let prioStete = prioElement.checked;
-
-   
 
     if (notProcesState && prioStete) {
       processElement.checked = false;
       prioElement.checked = false;
 
-      e.target.checked = true; }
+      e.target.checked = true;
+    }
     // sssssss
     const found = extraOptions.find(
       (element) => element.OrganizationOrgnr === OrganizationOrgnr
@@ -226,57 +231,7 @@ function Companies(props) {
     }
   };
 
-  // let clickHandPrio = (e, OrganizationOrgnr, index) => {
-  //   let processElement = document.getElementById(`${OrganizationOrgnr}process`);
-  //   let prioElement = document.getElementById(`${OrganizationOrgnr}prio`);
-  //   let prioStete = prioElement.checked;
-
-  //   if (prioStete) processElement.checked = false;
-
-  //   const found = extraOptions.find(
-  //     (element) => element.OrganizationOrgnr === OrganizationOrgnr
-  //   );
-
-  //   if (found) {
-  //     found.notProcesseState = processElement.checked;
-  //     found.prioState = prioElement.checked;
-
-  //     if (prioStete) {
-  //       setExtraOptions((prev) => [
-  //         ...prev.filter(
-  //           (item) => item.OrganizationOrgnr !== OrganizationOrgnr
-  //         ),
-  //         found,
-  //       ]);
-  //     } else if (!prioStete && found.note) {
-  //       setExtraOptions((prev) => [
-  //         ...prev.filter(
-  //           (item) => item.OrganizationOrgnr !== OrganizationOrgnr
-  //         ),
-  //         {
-  //           OrganizationOrgnr: OrganizationOrgnr,
-  //           note: found.note,
-  //         },
-  //       ]);
-  //     } else if (!prioStete && !found.note) {
-  //       setExtraOptions((prev) => [
-  //         ...prev.filter(
-  //           (item) => item.OrganizationOrgnr !== OrganizationOrgnr
-  //         ),
-  //       ]);
-  //     }
-  //   } else {
-  //     setExtraOptions((prev) => [
-  //       ...prev,
-  //       {
-  //         OrganizationOrgnr: OrganizationOrgnr,
-  //         notProcesseState: processElement.checked,
-  //         prioState: prioElement.checked,
-  //       },
-  //     ]);
-  //   }
-  // };
-
+  // ------------------------------------------------------------------------------
   let clickHandleNote = (e, OrganizationOrgnr, index) => {
     let note = e.target.value;
 
@@ -322,51 +277,66 @@ function Companies(props) {
         ...prev.filter((item) => item.OrganizationOrgnr !== OrganizationOrgnr),
       ]);
     }
-
-    // setExtraOptions((prev) => [
-    //   ...prev.filter(
-    //     (item) => item.OrganizationOrgnr !== OrganizationOrgnr
-    //   ),
-    //   {
-    //     OrganizationOrgnr: OrganizationOrgnr,
-
-    //     note: found.note,
-    //   },
-    // ]);
-    // }
-
-    // البحث عن رقم الشركة
-    // في حال كانت مصفوفة
-    // علي ان اعدل علي خيار النوت يلي فيها
-    // ومن ثم حذفها القديمة من الستيت
-    // واضافة الجديدة
   };
-  let sendData = () => {
-    console.log(reducerState.customerBranchChoice);
 
-    /* 
-jag ska bygga en sån objec
-{ OrgNum:34242,
-prio: true,
-dontProccess: false,
-note:""}
+  // ------------------------------------------------------------------------------
 
-dessa OBJ ska skickas till backend med alla SNI3 som jag har redan
+  // let sendData = () => {
+  //   console.log(reducerState.customerBranchChoice);
+  // };
 
-i backend jag ska hämta data för SNI3 och filtera med alla orgNumber för att plocka ut det företag vi vill
+  useEffect(() => {
+    let pageCompanies = allCompanies
+      ? allCompanies.map(
+          ({
+            OrganizationOrgnr,
+            OrganizationName,
+            OrganizationWeb,
+            OrganizationBransch,
+            OrganizationEmployees,
+            OrganizationTurnover,
+            Moderbolag,
+          }) => (
+            <tr key={OrganizationOrgnr}>
+              <td>{}</td>
+              <td> {OrganizationName}</td>
 
-att lägga prio eller ej arbete eller note till dem
+              <td>
+                <Form.Check
+                  type={"checkbox"}
+                  id={OrganizationOrgnr + "process"}
+                  onClick={(e) => clickHandleProcess(e, OrganizationOrgnr)}
+                />
+              </td>
+              <td>
+                <Form.Check
+                  type={"checkbox"}
+                  id={OrganizationOrgnr + "prio"}
+                  onClick={(e) => clickHandleProcess(e, OrganizationOrgnr)}
+                />
+              </td>
+              <td>
+                <Form.Control
+                  onChange={(e) => clickHandleNote(e, OrganizationOrgnr)}
+                />
+              </td>
 
-sedan jag kan använda find för att hitta varje företag och lägga till dessa data (prio osv.. ) till det. 
+              <td> {OrganizationWeb}</td>
+              <td> {OrganizationBransch}</td>
+              <td> {OrganizationEmployees}</td>
+              <td> {OrganizationTurnover}</td>
+              <td> {Moderbolag}</td>
+            </tr>
+          )
+        )
+      : "";
+    setPageCompaniesState(pageCompanies);
 
+    console.log(pageCompanies);
 
-
-
-
-
-
-*/
-  };
+    let checkboxes = document.getElementsByTagName("checkbox");
+    console.log(checkboxes);
+  }, [allCompanies, extraOptions]);
 
   return (
     <div>
@@ -382,162 +352,38 @@ sedan jag kan använda find för att hitta varje företag och lägga till dessa 
       </button>
       <br />
       <br />
-      <button type="button" onClick={sendData}>
-        Skicka
-      </button>
+      {/* <button type="button" onClick={sendData}> */}
+      {/* Skicka */}
+      {/* </button> */}
       <div className="pagination-container">
-        <div>
-          <Pagination>
-            {/* <Pagination.First /> */}
-            <Pagination.Prev onClick={prevPage} />
-            {/* <Pagination.Ellipsis /> */}
-            {itemsState}
-            {/* <Pagination.Ellipsis /> */}
-            <Pagination.Next onClick={nextPage} />
-            {/* <Pagination.Last /> */}
-          </Pagination>
-        </div>
+      <div>
+      <Pagination>
+        {/* <Pagination.First /> */}
+        <Pagination.Prev onClick={prevPage} />
+        {/* <Pagination.Ellipsis /> */}
+        {itemsState}
+        {/* <Pagination.Ellipsis /> */}
+        <Pagination.Next onClick={nextPage} />
+        {/* <Pagination.Last /> */}
+      </Pagination>
       </div>
+      </div>
+
       <div>
         <Table responsive striped bordered hover size="sm">
           <thead>
             <tr>
               <th>#</th>
-              {allTaHead.map((title, index) => (
-                <th key={index}>{title}</th>
+              {allTaHead.map((title) => (
+                <th >{title}</th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {allCompanies
-              ? allCompanies.map(
-                  (
-                    {
-                      OrganizationOrgnr,
-                      OrganizationName,
-
-                      //   OrganizationStreetName,
-                      //   OrganizationZIPCode,
-                      //   OrganisationKommun,
-                      //   OrganizationCity,
-                      //   OrganizationRegion,
-                      //   OrganizationTelefon,
-                      OrganizationWeb,
-                      //   OrganizationMail,
-                      OrganizationBransch,
-                      //   OrganizationSNI1,
-                      OrganizationEmployees,
-                      OrganizationTurnover,
-                      Moderbolag,
-
-                      //   RegNumberOfDigits,
-                      //   SNI2Numbers,
-                      //   SNI3Numbers,
-                      //   SNI4Numbers,
-                      //   SNI5Numbers,
-                      //   OrganizationV1W1,
-                      //   Postadress,
-                      //   Postnummer,
-                      //   Stad,
-                      //   FinancialYear,
-                      //   Resultat,
-                      //   SNIKod2,
-                      //   SNIKod2Description,
-                      //   Etablerades,
-                      //   EBITDA,
-                      //   Soliditet,
-                    },
-                    index
-                  ) => (
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      {/* <td> {OrganizationOrgnr}</td> */}
-                      <td> {OrganizationName}</td>
-
-                      <td>
-                        <Form.Check
-                          type={"checkbox"}
-                          id={OrganizationOrgnr + "process"}
-                          //   label="Select All"
-                          onClick={(e) =>
-                            clickHandleProcess(e, OrganizationOrgnr, index)
-                          }
-                        />
-                      </td>
-                      <td>
-                        <Form.Check
-                          type={"checkbox"}
-                          id={OrganizationOrgnr + "prio"}
-                          onClick={(e) =>
-                            clickHandleProcess(e, OrganizationOrgnr, index)
-                          }
-
-                          //   checked={prioChecket}
-                          //   id={"selectAll"}
-                          //   label="Select All"
-                          //   disabled={process}
-                          //   onChange={()=>{this.checked(!prioChecket)}}
-                        />
-                      </td>
-                      <td>
-                        <Form.Control
-                          id={index}
-                          onChange={(e) =>
-                            clickHandleNote(e, OrganizationOrgnr, index)
-                          }
-
-                          //   disabled={process}
-                        />
-                      </td>
-
-                      {/* <td> {OrganizationStreetName}</td> */}
-                      {/* <td> {OrganizationZIPCode}</td> */}
-                      {/* <td> {OrganisationKommun}</td> */}
-                      {/* <td> {OrganizationCity}</td> */}
-                      {/* <td> {OrganizationRegion}</td> */}
-                      {/* <td> {OrganizationTelefon}</td> */}
-                      <td> {OrganizationWeb}</td>
-                      {/* <td> {OrganizationMail}</td> */}
-                      <td> {OrganizationBransch}</td>
-                      {/* <td> {OrganizationSNI1}</td> */}
-                      <td> {OrganizationEmployees}</td>
-                      <td> {OrganizationTurnover}</td>
-                      <td> {Moderbolag}</td>
-                      {/* <td> {RegNumberOfDigits}</td> */}
-                      {/* <td> {SNI2Numbers}</td> */}
-                      {/* <td> {SNI3Numbers}</td> */}
-                      {/* <td> {SNI4Numbers}</td> */}
-                      {/* <td> {SNI5Numbers}</td> */}
-                      {/* <td> {OrganizationV1W1}</td> */}
-                      {/* <td> {Postadress}</td> */}
-                      {/* <td> {Postnummer}</td> */}
-                      {/* <td> {Stad}</td> */}
-                      {/* <td> {FinancialYear}</td> */}
-                      {/* <td> {Resultat}</td> */}
-                      {/* <td> {SNIKod2}</td> */}
-                      {/* <td> {SNIKod2Description}</td> */}
-                      {/* <td> {Etablerades}</td> */}
-                      {/* <td> {EBITDA}</td> */}
-                      {/* <td> {Soliditet}</td> */}
-                    </tr>
-                  )
-                )
-              : ""}
+             <PageCompaniesState allCompanies={allCompanies} /> 
+            {/* {pageCompaniesState} */}
           </tbody>
         </Table>
-      </div>
-      <div className="pagination-container">
-        <div>
-          <Pagination>
-            {/* <Pagination.First /> */}
-            <Pagination.Prev onClick={prevPage} />
-            {/* <Pagination.Ellipsis /> */}
-            {itemsState}
-            {/* <Pagination.Ellipsis /> */}
-            <Pagination.Next onClick={nextPage} />
-            {/* <Pagination.Last /> */}
-          </Pagination>
-        </div>
       </div>
     </div>
   );
@@ -557,3 +403,178 @@ export default Companies;
 // وبالتالي يفترض ان يتغير رقم الصفحة في خيار الفيتش
 // اي انه سيتم جلب داتا جديدة
 // وكذلك في خيار السابق
+
+// let clickHandPrio = (e, OrganizationOrgnr, index) => {
+//   let processElement = document.getElementById(`${OrganizationOrgnr}process`);
+//   let prioElement = document.getElementById(`${OrganizationOrgnr}prio`);
+//   let prioStete = prioElement.checked;
+
+//   if (prioStete) processElement.checked = false;
+
+//   const found = extraOptions.find(
+//     (element) => element.OrganizationOrgnr === OrganizationOrgnr
+//   );
+
+//   if (found) {
+//     found.notProcesseState = processElement.checked;
+//     found.prioState = prioElement.checked;
+
+//     if (prioStete) {
+//       setExtraOptions((prev) => [
+//         ...prev.filter(
+//           (item) => item.OrganizationOrgnr !== OrganizationOrgnr
+//         ),
+//         found,
+//       ]);
+//     } else if (!prioStete && found.note) {
+//       setExtraOptions((prev) => [
+//         ...prev.filter(
+//           (item) => item.OrganizationOrgnr !== OrganizationOrgnr
+//         ),
+//         {
+//           OrganizationOrgnr: OrganizationOrgnr,
+//           note: found.note,
+//         },
+//       ]);
+//     } else if (!prioStete && !found.note) {
+//       setExtraOptions((prev) => [
+//         ...prev.filter(
+//           (item) => item.OrganizationOrgnr !== OrganizationOrgnr
+//         ),
+//       ]);
+//     }
+//   } else {
+//     setExtraOptions((prev) => [
+//       ...prev,
+//       {
+//         OrganizationOrgnr: OrganizationOrgnr,
+//         notProcesseState: processElement.checked,
+//         prioState: prioElement.checked,
+//       },
+//     ]);
+//   }
+// };
+
+// {allCompanies
+//   ? allCompanies.map(
+//       (
+//         {
+//           OrganizationOrgnr,
+//           OrganizationName,
+
+//           //   OrganizationStreetName,
+//           //   OrganizationZIPCode,
+//           //   OrganisationKommun,
+//           //   OrganizationCity,
+//           //   OrganizationRegion,
+//           //   OrganizationTelefon,
+//           OrganizationWeb,
+//           //   OrganizationMail,
+//           OrganizationBransch,
+//           //   OrganizationSNI1,
+//           OrganizationEmployees,
+//           OrganizationTurnover,
+//           Moderbolag,
+
+//           //   RegNumberOfDigits,
+//           //   SNI2Numbers,
+//           //   SNI3Numbers,
+//           //   SNI4Numbers,
+//           //   SNI5Numbers,
+//           //   OrganizationV1W1,
+//           //   Postadress,
+//           //   Postnummer,
+//           //   Stad,
+//           //   FinancialYear,
+//           //   Resultat,
+//           //   SNIKod2,
+//           //   SNIKod2Description,
+//           //   Etablerades,
+//           //   EBITDA,
+//           //   Soliditet,
+//         },
+//         index
+//       ) => (
+//         <tr key={index}>
+//           <td>{index + 1}</td>
+//           <td> {OrganizationName}</td>
+
+//           <td>
+//             <Form.Check
+//               type={"checkbox"}
+//               id={OrganizationOrgnr + "process"}
+//               // onClick={(e) =>
+//               // clickHandleProcess(e, OrganizationOrgnr, index)
+//               // }
+//             />
+//           </td>
+//           <td>
+//             <Form.Check
+//               type={"checkbox"}
+//               id={OrganizationOrgnr + "prio"}
+//               // onClick={(e) =>
+//               // clickHandleProcess(e, OrganizationOrgnr, index)
+//               // }
+//             />
+//           </td>
+//           <td>
+//             <Form.Control
+//             // onChange={(e) =>
+//             // clickHandleNote(e, OrganizationOrgnr, index)
+//             // }
+
+//             //   disabled={process}
+//             />
+//           </td>
+//           {/* <td> {OrganizationStreetName}</td> */}
+//           {/* <td> {OrganizationZIPCode}</td> */}
+//           {/* <td> {OrganisationKommun}</td> */}
+//           {/* <td> {OrganizationCity}</td> */}
+//           {/* <td> {OrganizationRegion}</td> */}
+//           {/* <td> {OrganizationTelefon}</td> */}
+//           <td> {OrganizationWeb}</td>
+//           {/* <td> {OrganizationMail}</td> */}
+//           <td> {OrganizationBransch}</td>
+//           {/* <td> {OrganizationSNI1}</td> */}
+//           <td> {OrganizationEmployees}</td>
+//           <td> {OrganizationTurnover}</td>
+//           <td> {Moderbolag}</td>
+//           {/* <td> {RegNumberOfDigits}</td> */}
+//           {/* <td> {SNI2Numbers}</td> */}
+//           {/* <td> {SNI3Numbers}</td> */}
+//           {/* <td> {SNI4Numbers}</td> */}
+//           {/* <td> {SNI5Numbers}</td> */}
+//           {/* <td> {OrganizationV1W1}</td> */}
+//           {/* <td> {Postadress}</td> */}
+//           {/* <td> {Postnummer}</td> */}
+//           {/* <td> {Stad}</td> */}
+//           {/* <td> {FinancialYear}</td> */}
+//           {/* <td> {Resultat}</td> */}
+//           {/* <td> {SNIKod2}</td> */}
+//           {/* <td> {SNIKod2Description}</td> */}
+//           {/* <td> {Etablerades}</td> */}
+//           {/* <td> {EBITDA}</td> */}
+//           {/* <td> {Soliditet}</td> */}
+//         </tr>
+//       )
+//     )
+//   : ""}
+
+/* 
+jag ska bygga en sån objec
+{ OrgNum:34242,
+prio: true,
+dontProccess: false,
+note:""}
+
+dessa OBJ ska skickas till backend med alla SNI3 som jag har redan
+
+i backend jag ska hämta data för SNI3 och filtera med alla orgNumber för att plocka ut det företag vi vill
+
+att lägga prio eller ej arbete eller note till dem
+
+sedan jag kan använda find för att hitta varje företag och lägga till dessa data (prio osv.. ) till det. 
+
+*/
+
+//

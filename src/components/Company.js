@@ -63,31 +63,7 @@ function Company() {
     dispatch(selectedPage(1));
     navigate(`/companies/${1}`);
 
-    // try {
-
-    //   const res = await axios.post(
-    //     "http://localhost:3000/api/company/1/",
-    //     {
-    //       SNI3Numbers: customerChoice,
-    //     },
-    //     { withCredentials: true }
-    //   );
-
-    //   //   console.log(res.status);
-    //   if (res.statusText === "OK") {
-    //     // dispatch(loginIn(true))
-
-    //     console.log(res.data);
-    //     // setSelectedCompanies(res.data)
-    //     dispatch(selectedCompanies(res.data));
-    //     dispatch(selectedPage(1));
-
-    //     navigate(`/companies/1`);
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    //   navigate("/login");
-    // }
+   
   };
 
   function toggleAll(source) {
@@ -169,7 +145,6 @@ function Company() {
     <div>
       <h1> company</h1>
       <button type="button" onClick={sendData}>
-        {" "}
         Sök företag inom markerade branscher
       </button>
       <Form.Check
@@ -213,7 +188,6 @@ function Company() {
       <br />
 
       <button type="button" onClick={sendData}>
-        {" "}
         Sök företag inom markerade branscher
       </button>
       <br />

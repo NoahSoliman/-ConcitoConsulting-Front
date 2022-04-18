@@ -6,133 +6,176 @@ import { Form, Pagination, PageItem, Table, InputGroup } from "react-bootstrap";
 
 function PageCompaniesState(props) {
   let test = props.allCompanies;
-  console.log(test);
+  // console.log(test);
 
-  const [pageCompaniesState, setPageCompaniesState] = useState([]);
+  let [pageCompaniesState, setPageCompaniesState] = useState([]);
 
   let [extraOptions, setExtraOptions] = useState([]);
+  let [clickHandleState, setClickHandleState] = useState([]);
+  let [clickHandleStateNote, setClickHandleStateNote] = useState([]);
 
+  let clickHandleProcess2 = (e, OrganizationOrgnr, index) => {
+    console.log(extraOptions);
+  };
 
+  useEffect(() => {
+    console.log("useEffect");
 
-  
-  let clickHandleProcess = (e, OrganizationOrgnr, index) => {
-    let prioElement = document.getElementById(`${OrganizationOrgnr}prio`);
-    let processElement = document.getElementById(`${OrganizationOrgnr}process`);
+    if (clickHandleState.length) {
+      console.log("clickHandleState.length");
+      let prioElement = document.getElementById(`${clickHandleState[1]}prio`);
+      let processElement = document.getElementById(
+        `${clickHandleState[1]}process`
+      );
 
-    console.log(prioElement);
-    console.log(processElement);
-    let notProcesState = processElement.checked;
-    let prioStete = prioElement.checked;
+      console.log(prioElement);
+      console.log(processElement);
+      let notProcesState = processElement.checked;
+      let prioStete = prioElement.checked;
 
-    if (notProcesState && prioStete) {
-      processElement.checked = false;
-      prioElement.checked = false;
+      if (notProcesState && prioStete) {
+        processElement.checked = false;
+        prioElement.checked = false;
 
-      e.target.checked = true;
-    }
-    // sssssss
-    const found = extraOptions.find(
-      (element) => element.OrganizationOrgnr === OrganizationOrgnr
-    );
-    if (found) {
-      found.notProcesseState = processElement.checked;
-      found.prioState = prioElement.checked;
+        clickHandleState[0].target.checked = true;
+      }
+      // // console.log(OrganizationOrgnr);
+      console.log(extraOptions);
 
-      if (notProcesState || prioStete) {
+      let found = extraOptions.find(
+        (element) => element.OrganizationOrgnr === clickHandleState[1]
+      );
+      console.log(found);
+      if (found) {
+        console.log("found");
+        found.notProcesseState = processElement.checked;
+        found.prioState = prioElement.checked;
+
+        if (notProcesState || prioStete) {
+          console.log("notProcesState || prioStete");
+          setExtraOptions((prev) => [
+            ...prev.filter(
+              (item) => item.OrganizationOrgnr !== clickHandleState[1]
+            ),
+            found,
+          ]);
+        } else if ((!notProcesState || prioStete) && found.note) {
+          console.log("!notProcesState || prioStete");
+
+          setExtraOptions((prev) => [
+            ...prev.filter(
+              (item) => item.OrganizationOrgnr !== clickHandleState[1]
+            ),
+            {
+              OrganizationOrgnr: clickHandleState[1],
+              note: found.note,
+            },
+          ]);
+        } else if ((!notProcesState || prioStete) && !found.note) {
+          console.log("remove");
+          setClickHandleState([]);
+          setExtraOptions((prev) => [
+            ...prev.filter(
+              (item) => item.OrganizationOrgnr !== clickHandleState[1]
+            ),
+          ]);
+        }
+      } else {
         setExtraOptions((prev) => [
-          ...prev.filter(
-            (item) => item.OrganizationOrgnr !== OrganizationOrgnr
-          ),
-          found,
-        ]);
-      } else if ((!notProcesState || prioStete) && found.note) {
-        setExtraOptions((prev) => [
-          ...prev.filter(
-            (item) => item.OrganizationOrgnr !== OrganizationOrgnr
-          ),
+          ...prev,
           {
-            OrganizationOrgnr: OrganizationOrgnr,
-            note: found.note,
+            OrganizationOrgnr: clickHandleState[1],
+            notProcesseState: processElement.checked,
+            prioState: prioElement.checked,
           },
         ]);
-      } else if ((!notProcesState || prioStete) && !found.note) {
+      }
+    }
+
+    if (clickHandleStateNote.length) {
+      let note = clickHandleStateNote[0].target.value;
+
+      // console.log(OrganizationOrgnr);
+
+      let found = extraOptions.find(
+        (element) => element.OrganizationOrgnr === clickHandleStateNote[1]
+      );
+      // if (note) {
+
+      if (found && note) {
+        found.note = note;
+
+        console.log(found);
+        console.log(found.notProcesseState);
+        console.log(found.prioState);
+        if (found.notProcesseState === false && found.prioState === false) {
+          console.log("!found.notProcesState&&!found.prioState");
+          setExtraOptions((prev) => [
+            ...prev.filter(
+              (item) => item.OrganizationOrgnr !== clickHandleStateNote[1]
+            ),
+            {
+              OrganizationOrgnr: clickHandleStateNote[1],
+              note: found.note,
+            },
+          ]);
+        } else if (found.notProcesState || found.prioState) {
+          console.log("found.notProcesState ||found.prioState");
+          setExtraOptions((prev) => [
+            ...prev.filter(
+              (item) => item.OrganizationOrgnr !== clickHandleStateNote[1]
+            ),
+
+            found,
+          ]);
+        }
+      } else if (!found && note) {
+        setExtraOptions((prev) => [
+          ...prev,
+          {
+            OrganizationOrgnr: clickHandleStateNote[1],
+
+            note: note,
+          },
+        ]);
+      } else if ((found.prioState || found.notProcesseState) && !note) {
+        // console.log("((found.prioState || found.notProcesState) && !note)");
+        setClickHandleStateNote([]);
         setExtraOptions((prev) => [
           ...prev.filter(
-            (item) => item.OrganizationOrgnr !== OrganizationOrgnr
+            (item) => item.OrganizationOrgnr !== clickHandleStateNote[1]
+          ),
+          {
+            OrganizationOrgnr: clickHandleStateNote[1],
+            notProcesseState: found.notProcesseState,
+            prioState: found.prioState,
+          },
+        ]);
+      } else if (found && !note) {
+        console.log(found);
+        console.log(!note);
+        console.log("found && !note)-found && !note)-found && !note)");
+        setClickHandleStateNote([]);
+        setClickHandleState([]);
+        setExtraOptions((prev) => [
+          ...prev.filter(
+            (item) => item.OrganizationOrgnr !== clickHandleStateNote[1]
           ),
         ]);
       }
-    } else {
-      setExtraOptions((prev) => [
-        ...prev,
-        {
-          OrganizationOrgnr: OrganizationOrgnr,
-          notProcesseState: processElement.checked,
-          prioState: prioElement.checked,
-        },
-      ]);
     }
-  };
+
+    // محاولة معرفة لماذا يتكرر الحفظ عند ادخال الحقل الاول فقط حرف واحد واذا ما كانت هذه الطريقة افضل من التي قبلها
+  }, [clickHandleState, clickHandleStateNote]);
+
+  let clickHandleProcess = (e, OrganizationOrgnr, index) => {};
 
   // ------------------------------------------------------------------------------
-  let clickHandleNote = (e, OrganizationOrgnr, index) => {
-    let note = e.target.value;
-
-    console.log(OrganizationOrgnr);
-
-    const found = extraOptions.find(
-      (element) => element.OrganizationOrgnr === OrganizationOrgnr
-    );
-
-    // if (note) {
-
-    if (found && note) {
-      found.note = note;
-
-      console.log(found);
-
-      setExtraOptions((prev) => [
-        ...prev.filter((item) => item.OrganizationOrgnr !== OrganizationOrgnr),
-
-        found,
-      ]);
-    } else if (!found && note) {
-      setExtraOptions((prev) => [
-        ...prev,
-        {
-          OrganizationOrgnr: OrganizationOrgnr,
-
-          note: note,
-        },
-      ]);
-    } else if ((found.prioState || found.notProcesseState) && !note) {
-      console.log("((found.prioState || found.notProcesState) && !note)");
-      setExtraOptions((prev) => [
-        ...prev.filter((item) => item.OrganizationOrgnr !== OrganizationOrgnr),
-        {
-          OrganizationOrgnr: OrganizationOrgnr,
-          notProcesseState: found.notProcesseState,
-          prioState: found.prioState,
-        },
-      ]);
-    } else if (found && !note) {
-      setExtraOptions((prev) => [
-        ...prev.filter((item) => item.OrganizationOrgnr !== OrganizationOrgnr),
-      ]);
-    }
-  };
-
-  // const [allccompanies, setAllccompanies] = useState([]);
+  let clickHandleNote = (e, OrganizationOrgnr, index) => {};
 
   useEffect(() => {
-    // setAllccompanies(test)
+    console.log("useEffect get allCompanies");
 
-    // for (let i = 0; i < props.allCompanies.length; i++) {
-    //   let ptworkinfo =React.createElement('input',{type: 'checkbox', defaultChecked: false});
-
-    //   console.log(ptworkinfo);
-    //   setPagetest((prevState) => [...prevState, ptworkinfo]);
-    // }
     let pageCompanies = props.allCompanies
       ? props.allCompanies.map(
           (
@@ -146,8 +189,10 @@ function PageCompaniesState(props) {
               Moderbolag,
             },
             index
-          ) => (
-            
+          ) => {
+            // console.log(OrganizationOrgnr)
+
+            return (
               <tr key={OrganizationOrgnr}>
                 <td>{index + 1}</td>
                 <td> {OrganizationName}</td>
@@ -157,7 +202,7 @@ function PageCompaniesState(props) {
                     type={"checkbox"}
                     id={OrganizationOrgnr + "process"}
                     onClick={(e) =>
-                      clickHandleProcess(e, OrganizationOrgnr, index)
+                      setClickHandleState([e, OrganizationOrgnr, index])
                     }
                   />
                 </td>
@@ -166,14 +211,15 @@ function PageCompaniesState(props) {
                     type={"checkbox"}
                     id={OrganizationOrgnr + "prio"}
                     onClick={(e) =>
-                      clickHandleProcess(e, OrganizationOrgnr, index)
+                      setClickHandleState([e, OrganizationOrgnr, index])
                     }
                   />
                 </td>
                 <td>
                   <Form.Control
+                    id={OrganizationOrgnr + "note"}
                     onChange={(e) =>
-                      clickHandleNote(e, OrganizationOrgnr, index)
+                      setClickHandleStateNote([e, OrganizationOrgnr, index])
                     }
                   />
                 </td>
@@ -184,12 +230,12 @@ function PageCompaniesState(props) {
                 <td> {OrganizationTurnover}</td>
                 <td> {Moderbolag}</td>
               </tr>
-            
-          )
+            );
+          }
         )
       : "";
     setPageCompaniesState(pageCompanies);
-  }, [props,extraOptions]);
+  }, [props]);
 
   return <>{pageCompaniesState}</>;
 }

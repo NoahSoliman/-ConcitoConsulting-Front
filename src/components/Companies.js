@@ -27,9 +27,6 @@ function Companies(props) {
   const [maxNum, setMaxNum] = useState(10);
   const [totalPage, setTotalPage] = useState("");
   const [allCompanies, setAllCompanies] = useState([]);
-  const [process, setProcess] = useState(false);
-  const [prioChecket, setPrioChecket] = useState(false);
-  const [pageCompaniesState, setPageCompaniesState] = useState([]);
   const [allTaHead, setAllTaHead] = useState([
     // "OrganizationOrgnr",
     "OrganizationName",
@@ -67,7 +64,6 @@ function Companies(props) {
     // "Soliditet",
   ]);
 
-  let [extraOptions, setExtraOptions] = useState([]);
 
   let navigate = useNavigate();
 
@@ -172,171 +168,13 @@ function Companies(props) {
     }
   }
 
-  let clickHandleProcess = (e, OrganizationOrgnr, index) => {
-    let prioElement = document.getElementById(`${OrganizationOrgnr}prio`);
-    let processElement = document.getElementById(`${OrganizationOrgnr}process`);
-
-    console.log(prioElement);
-    console.log(processElement);
-    let notProcesState = processElement.checked;
-    let prioStete = prioElement.checked;
-
-    if (notProcesState && prioStete) {
-      processElement.checked = false;
-      prioElement.checked = false;
-
-      e.target.checked = true;
-    }
-    // sssssss
-    const found = extraOptions.find(
-      (element) => element.OrganizationOrgnr === OrganizationOrgnr
-    );
-    if (found) {
-      found.notProcesseState = processElement.checked;
-      found.prioState = prioElement.checked;
-
-      if (notProcesState || prioStete) {
-        setExtraOptions((prev) => [
-          ...prev.filter(
-            (item) => item.OrganizationOrgnr !== OrganizationOrgnr
-          ),
-          found,
-        ]);
-      } else if ((!notProcesState || prioStete) && found.note) {
-        setExtraOptions((prev) => [
-          ...prev.filter(
-            (item) => item.OrganizationOrgnr !== OrganizationOrgnr
-          ),
-          {
-            OrganizationOrgnr: OrganizationOrgnr,
-            note: found.note,
-          },
-        ]);
-      } else if ((!notProcesState || prioStete) && !found.note) {
-        setExtraOptions((prev) => [
-          ...prev.filter(
-            (item) => item.OrganizationOrgnr !== OrganizationOrgnr
-          ),
-        ]);
-      }
-    } else {
-      setExtraOptions((prev) => [
-        ...prev,
-        {
-          OrganizationOrgnr: OrganizationOrgnr,
-          notProcesseState: processElement.checked,
-          prioState: prioElement.checked,
-        },
-      ]);
-    }
-  };
-
-  // ------------------------------------------------------------------------------
-  let clickHandleNote = (e, OrganizationOrgnr, index) => {
-    let note = e.target.value;
-
-    console.log(OrganizationOrgnr);
-
-    const found = extraOptions.find(
-      (element) => element.OrganizationOrgnr === OrganizationOrgnr
-    );
-
-    // if (note) {
-
-    if (found && note) {
-      found.note = note;
-
-      console.log(found);
-
-      setExtraOptions((prev) => [
-        ...prev.filter((item) => item.OrganizationOrgnr !== OrganizationOrgnr),
-
-        found,
-      ]);
-    } else if (!found && note) {
-      setExtraOptions((prev) => [
-        ...prev,
-        {
-          OrganizationOrgnr: OrganizationOrgnr,
-
-          note: note,
-        },
-      ]);
-    } else if ((found.prioState || found.notProcesseState) && !note) {
-      console.log("((found.prioState || found.notProcesState) && !note)");
-      setExtraOptions((prev) => [
-        ...prev.filter((item) => item.OrganizationOrgnr !== OrganizationOrgnr),
-        {
-          OrganizationOrgnr: OrganizationOrgnr,
-          notProcesseState: found.notProcesseState,
-          prioState: found.prioState,
-        },
-      ]);
-    } else if (found && !note) {
-      setExtraOptions((prev) => [
-        ...prev.filter((item) => item.OrganizationOrgnr !== OrganizationOrgnr),
-      ]);
-    }
-  };
-
   // ------------------------------------------------------------------------------
 
-  // let sendData = () => {
-  //   console.log(reducerState.customerBranchChoice);
-  // };
+  let sendData = () => {
+    console.log(reducerState.customerBranchChoice);
+  };
 
-  useEffect(() => {
-    let pageCompanies = allCompanies
-      ? allCompanies.map(
-          ({
-            OrganizationOrgnr,
-            OrganizationName,
-            OrganizationWeb,
-            OrganizationBransch,
-            OrganizationEmployees,
-            OrganizationTurnover,
-            Moderbolag,
-          }) => (
-            <tr key={OrganizationOrgnr}>
-              <td>{}</td>
-              <td> {OrganizationName}</td>
 
-              <td>
-                <Form.Check
-                  type={"checkbox"}
-                  id={OrganizationOrgnr + "process"}
-                  onClick={(e) => clickHandleProcess(e, OrganizationOrgnr)}
-                />
-              </td>
-              <td>
-                <Form.Check
-                  type={"checkbox"}
-                  id={OrganizationOrgnr + "prio"}
-                  onClick={(e) => clickHandleProcess(e, OrganizationOrgnr)}
-                />
-              </td>
-              <td>
-                <Form.Control
-                  onChange={(e) => clickHandleNote(e, OrganizationOrgnr)}
-                />
-              </td>
-
-              <td> {OrganizationWeb}</td>
-              <td> {OrganizationBransch}</td>
-              <td> {OrganizationEmployees}</td>
-              <td> {OrganizationTurnover}</td>
-              <td> {Moderbolag}</td>
-            </tr>
-          )
-        )
-      : "";
-    setPageCompaniesState(pageCompanies);
-
-    console.log(pageCompanies);
-
-    let checkboxes = document.getElementsByTagName("checkbox");
-    console.log(checkboxes);
-  }, [allCompanies, extraOptions]);
 
   return (
     <div>
@@ -352,9 +190,9 @@ function Companies(props) {
       </button>
       <br />
       <br />
-      {/* <button type="button" onClick={sendData}> */}
-      {/* Skicka */}
-      {/* </button> */}
+      <button type="button" onClick={sendData}>
+      Skicka
+      </button>
       <div className="pagination-container">
       <div>
       <Pagination>
@@ -381,7 +219,7 @@ function Companies(props) {
           </thead>
           <tbody>
              <PageCompaniesState allCompanies={allCompanies} /> 
-            {/* {pageCompaniesState} */}
+         
           </tbody>
         </Table>
       </div>

@@ -235,6 +235,8 @@ function PageCompaniesState(props) {
         )
       : "";
     setPageCompaniesState(pageCompanies);
+    setClickHandleState([])
+    setClickHandleStateNote([])
   }, [props]);
 
   return <>{pageCompaniesState}</>;

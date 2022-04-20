@@ -87,7 +87,7 @@ function Companies(props) {
         );
 
         if (res.statusText === "OK") {
-          console.log("res.statusText === OK");
+          // console.log("res.statusText === OK");
           // console.log(res.data);
           // console.log(res.data.total);
           setTotalPage(Math.ceil(res.data.total / 50));

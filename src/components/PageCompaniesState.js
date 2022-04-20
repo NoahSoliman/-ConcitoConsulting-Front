@@ -14,22 +14,22 @@ function PageCompaniesState(props) {
   let [clickHandleState, setClickHandleState] = useState([]);
   let [clickHandleStateNote, setClickHandleStateNote] = useState([]);
 
-  let clickHandleProcess2 = (e, OrganizationOrgnr, index) => {
+  let clickHandleProcess2 = (e, organizationOrgnr, index) => {
     console.log(extraOptions);
   };
 
   useEffect(() => {
-    console.log("useEffect");
+    console.log("useEffect save options");
 
     if (clickHandleState.length) {
-      console.log("clickHandleState.length");
+      // console.log("clickHandleState.length");
       let prioElement = document.getElementById(`${clickHandleState[1]}prio`);
       let processElement = document.getElementById(
         `${clickHandleState[1]}process`
       );
 
-      console.log(prioElement);
-      console.log(processElement);
+      // console.log(prioElement);
+      // console.log(processElement);
       let notProcesState = processElement.checked;
       let prioStete = prioElement.checked;
 
@@ -39,44 +39,44 @@ function PageCompaniesState(props) {
 
         clickHandleState[0].target.checked = true;
       }
-      // // console.log(OrganizationOrgnr);
-      console.log(extraOptions);
+      // // console.log(organizationOrgnr);
+      // console.log(extraOptions);
 
       let found = extraOptions.find(
-        (element) => element.OrganizationOrgnr === clickHandleState[1]
+        (element) => element.organizationOrgnr === clickHandleState[1]
       );
-      console.log(found);
+      // console.log(found);
       if (found) {
-        console.log("found");
+        // console.log("found");
         found.notProcesseState = processElement.checked;
         found.prioState = prioElement.checked;
 
         if (notProcesState || prioStete) {
-          console.log("notProcesState || prioStete");
+          // console.log("notProcesState || prioStete");
           setExtraOptions((prev) => [
             ...prev.filter(
-              (item) => item.OrganizationOrgnr !== clickHandleState[1]
+              (item) => item.organizationOrgnr !== clickHandleState[1]
             ),
             found,
           ]);
         } else if ((!notProcesState || prioStete) && found.note) {
-          console.log("!notProcesState || prioStete");
+          // console.log("!notProcesState || prioStete");
 
           setExtraOptions((prev) => [
             ...prev.filter(
-              (item) => item.OrganizationOrgnr !== clickHandleState[1]
+              (item) => item.organizationOrgnr !== clickHandleState[1]
             ),
             {
-              OrganizationOrgnr: clickHandleState[1],
+              organizationOrgnr: clickHandleState[1],
               note: found.note,
             },
           ]);
         } else if ((!notProcesState || prioStete) && !found.note) {
-          console.log("remove");
+          // console.log("remove");
           setClickHandleState([]);
           setExtraOptions((prev) => [
             ...prev.filter(
-              (item) => item.OrganizationOrgnr !== clickHandleState[1]
+              (item) => item.organizationOrgnr !== clickHandleState[1]
             ),
           ]);
         }
@@ -84,7 +84,7 @@ function PageCompaniesState(props) {
         setExtraOptions((prev) => [
           ...prev,
           {
-            OrganizationOrgnr: clickHandleState[1],
+            organizationOrgnr: clickHandleState[1],
             notProcesseState: processElement.checked,
             prioState: prioElement.checked,
           },
@@ -95,35 +95,35 @@ function PageCompaniesState(props) {
     if (clickHandleStateNote.length) {
       let note = clickHandleStateNote[0].target.value;
 
-      // console.log(OrganizationOrgnr);
+      // console.log(organizationOrgnr);
 
       let found = extraOptions.find(
-        (element) => element.OrganizationOrgnr === clickHandleStateNote[1]
+        (element) => element.organizationOrgnr === clickHandleStateNote[1]
       );
       // if (note) {
 
       if (found && note) {
         found.note = note;
 
-        console.log(found);
-        console.log(found.notProcesseState);
-        console.log(found.prioState);
+        // console.log(found);
+        // console.log(found.notProcesseState);
+        // console.log(found.prioState);
         if (found.notProcesseState === false && found.prioState === false) {
-          console.log("!found.notProcesState&&!found.prioState");
+          // console.log("!found.notProcesState&&!found.prioState");
           setExtraOptions((prev) => [
             ...prev.filter(
-              (item) => item.OrganizationOrgnr !== clickHandleStateNote[1]
+              (item) => item.organizationOrgnr !== clickHandleStateNote[1]
             ),
             {
-              OrganizationOrgnr: clickHandleStateNote[1],
+              organizationOrgnr: clickHandleStateNote[1],
               note: found.note,
             },
           ]);
         } else if (found.notProcesState || found.prioState) {
-          console.log("found.notProcesState ||found.prioState");
+          // console.log("found.notProcesState ||found.prioState");
           setExtraOptions((prev) => [
             ...prev.filter(
-              (item) => item.OrganizationOrgnr !== clickHandleStateNote[1]
+              (item) => item.organizationOrgnr !== clickHandleStateNote[1]
             ),
 
             found,
@@ -133,7 +133,7 @@ function PageCompaniesState(props) {
         setExtraOptions((prev) => [
           ...prev,
           {
-            OrganizationOrgnr: clickHandleStateNote[1],
+            organizationOrgnr: clickHandleStateNote[1],
 
             note: note,
           },
@@ -143,23 +143,23 @@ function PageCompaniesState(props) {
         setClickHandleStateNote([]);
         setExtraOptions((prev) => [
           ...prev.filter(
-            (item) => item.OrganizationOrgnr !== clickHandleStateNote[1]
+            (item) => item.organizationOrgnr !== clickHandleStateNote[1]
           ),
           {
-            OrganizationOrgnr: clickHandleStateNote[1],
+            organizationOrgnr: clickHandleStateNote[1],
             notProcesseState: found.notProcesseState,
             prioState: found.prioState,
           },
         ]);
       } else if (found && !note) {
-        console.log(found);
-        console.log(!note);
-        console.log("found && !note)-found && !note)-found && !note)");
+        // console.log(found);
+        // console.log(!note);
+        // console.log("found && !note)-found && !note)-found && !note)");
         setClickHandleStateNote([]);
         setClickHandleState([]);
         setExtraOptions((prev) => [
           ...prev.filter(
-            (item) => item.OrganizationOrgnr !== clickHandleStateNote[1]
+            (item) => item.organizationOrgnr !== clickHandleStateNote[1]
           ),
         ]);
       }
@@ -168,10 +168,30 @@ function PageCompaniesState(props) {
     // محاولة معرفة لماذا يتكرر الحفظ عند ادخال الحقل الاول فقط حرف واحد واذا ما كانت هذه الطريقة افضل من التي قبلها
   }, [clickHandleState, clickHandleStateNote]);
 
-  let clickHandleProcess = (e, OrganizationOrgnr, index) => {};
-
   // ------------------------------------------------------------------------------
-  let clickHandleNote = (e, OrganizationOrgnr, index) => {};
+  useEffect(() => {
+    extraOptions.map((item) => {
+      console.log("useEffect check item that checked");
+      // console.log(item);
+      // let orgProcessId = item.organizationOrgnr + "process";
+      // let prioElement = document.getElementById(`${clickHandleState[1]}prio`);
+      let notProcessElement = document.getElementById(
+        `${item.organizationOrgnr}process`
+      );
+      let prioElement = document.getElementById(
+        `${item.organizationOrgnr}prio`
+      );
+      let noteElement = document.getElementById(
+        `${item.organizationOrgnr}note`
+      );
+      if (notProcessElement) notProcessElement.checked = item.notProcesseState;
+      // //
+      if (prioElement) prioElement.checked = item.prioState;
+
+      if (noteElement &&  item.note ) noteElement.value = item.note 
+     
+    });
+  }, [pageCompaniesState]);
 
   useEffect(() => {
     console.log("useEffect get allCompanies");
@@ -190,7 +210,7 @@ function PageCompaniesState(props) {
             },
             index
           ) => {
-            // console.log(OrganizationOrgnr)
+            // console.log(organizationOrgnr)
 
             return (
               <tr key={OrganizationOrgnr}>
@@ -235,8 +255,8 @@ function PageCompaniesState(props) {
         )
       : "";
     setPageCompaniesState(pageCompanies);
-    setClickHandleState([])
-    setClickHandleStateNote([])
+    setClickHandleState([]);
+    setClickHandleStateNote([]);
   }, [props]);
 
   return <>{pageCompaniesState}</>;

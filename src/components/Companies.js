@@ -172,6 +172,8 @@ function Companies(props) {
 
   let sendData = () => {
     console.log(reducerState.customerBranchChoice);
+
+    
   };
 
 

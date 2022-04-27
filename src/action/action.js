@@ -19,4 +19,11 @@ function setCustomerBranchChoice(data) {
     }
 }
 
-export {selectedCompanies,selectedPage,setCustomerBranchChoice}
+function setCustomerOptions(data) {
+    return {
+        type: 'setCustomerOptions',
+        data: data,
+    }
+}
+
+export {selectedCompanies,selectedPage,setCustomerBranchChoice,setCustomerOptions}

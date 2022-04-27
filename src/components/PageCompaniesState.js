@@ -4,9 +4,12 @@ import { useState, useEffect } from "react";
 
 import { Form, Pagination, PageItem, Table, InputGroup } from "react-bootstrap";
 
+import { useSelector, useDispatch } from "react-redux";
+
+import { setCustomerOptions } from "../action/action";
+
 function PageCompaniesState(props) {
-  let test = props.allCompanies;
-  // console.log(test);
+  const dispatch = useDispatch();
 
   let [pageCompaniesState, setPageCompaniesState] = useState([]);
 
@@ -14,12 +17,14 @@ function PageCompaniesState(props) {
   let [clickHandleState, setClickHandleState] = useState([]);
   let [clickHandleStateNote, setClickHandleStateNote] = useState([]);
 
-  let clickHandleProcess2 = (e, organizationOrgnr, index) => {
-    console.log(extraOptions);
-  };
+  useEffect(() => {
+    // console.log(" dispatch options");
+    dispatch(setCustomerOptions(extraOptions));
+
+  }, [extraOptions]);
 
   useEffect(() => {
-    console.log("useEffect save options");
+    // console.log("useEffect save options");
 
     if (clickHandleState.length) {
       // console.log("clickHandleState.length");
@@ -72,7 +77,7 @@ function PageCompaniesState(props) {
             },
           ]);
         } else if ((!notProcesState || prioStete) && !found.note) {
-          // console.log("remove");
+          // console.log("!notProcesState || prioStete)rem");
           setClickHandleState([]);
           setExtraOptions((prev) => [
             ...prev.filter(
@@ -81,6 +86,7 @@ function PageCompaniesState(props) {
           ]);
         }
       } else {
+        // console.log("else else else ");
         setExtraOptions((prev) => [
           ...prev,
           {
@@ -105,10 +111,12 @@ function PageCompaniesState(props) {
       if (found && note) {
         found.note = note;
 
+        // console.log("found && note");
         // console.log(found);
+        // console.log(note.notProcesseState);
         // console.log(found.notProcesseState);
         // console.log(found.prioState);
-        if (found.notProcesseState === false && found.prioState === false) {
+        if (found.notProcesseState === undefined && found.prioState === undefined) {
           // console.log("!found.notProcesState&&!found.prioState");
           setExtraOptions((prev) => [
             ...prev.filter(
@@ -119,7 +127,9 @@ function PageCompaniesState(props) {
               note: found.note,
             },
           ]);
-        } else if (found.notProcesState || found.prioState) {
+        } else
+         if (found.notProcesseState || found.prioState) {
+
           // console.log("found.notProcesState ||found.prioState");
           setExtraOptions((prev) => [
             ...prev.filter(
@@ -130,6 +140,8 @@ function PageCompaniesState(props) {
           ]);
         }
       } else if (!found && note) {
+          console.log("!found && note");
+
         setExtraOptions((prev) => [
           ...prev,
           {
@@ -139,7 +151,7 @@ function PageCompaniesState(props) {
           },
         ]);
       } else if ((found.prioState || found.notProcesseState) && !note) {
-        // console.log("((found.prioState || found.notProcesState) && !note)");
+        console.log("((found.prioState || found.notProcesState) && !note)");
         setClickHandleStateNote([]);
         setExtraOptions((prev) => [
           ...prev.filter(
@@ -171,7 +183,7 @@ function PageCompaniesState(props) {
   // ------------------------------------------------------------------------------
   useEffect(() => {
     extraOptions.map((item) => {
-      console.log("useEffect check item that checked");
+      // console.log("useEffect check item that checked");
       // console.log(item);
       // let orgProcessId = item.organizationOrgnr + "process";
       // let prioElement = document.getElementById(`${clickHandleState[1]}prio`);
@@ -188,13 +200,12 @@ function PageCompaniesState(props) {
       // //
       if (prioElement) prioElement.checked = item.prioState;
 
-      if (noteElement &&  item.note ) noteElement.value = item.note 
-     
+      if (noteElement && item.note) noteElement.value = item.note;
     });
   }, [pageCompaniesState]);
 
   useEffect(() => {
-    console.log("useEffect get allCompanies");
+    // console.log("useEffect get allCompanies");
 
     let pageCompanies = props.allCompanies
       ? props.allCompanies.map(
@@ -263,3 +274,5 @@ function PageCompaniesState(props) {
 }
 
 export default PageCompaniesState;
+
+/* انشاء فانكشن يوز افيكت تتحدث مع تحديث الاوبشن وتزامن الاوبش مع الريدويسر ومن ثم نقوم بالوصول الى الستيت في الريدوسير من مكون الكمبيوني */

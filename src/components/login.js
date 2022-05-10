@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 // import { useSelector, useDispatch } from "react-redux";
+import { Alert, Form, Col, Row, Button } from "react-bootstrap/";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -47,48 +48,71 @@ function Register() {
         localStorage.setItem("Logins State", JSON.stringify({ loginIn: true }));
 
         // console.log(res);
-        navigate("/company")
+        navigate("/company");
       }
-
-      //   console.log(!resJson.hasOwnProperty("errors"));
-
-      //   if (res.status === 200 && !resJson.hasOwnProperty("errors")) {
-      //     // setName("");
-      //     // setEmail("");
-      //     // setPassword("");
-      //     setMessage("User created successfully");
-      //   } else {
-      //   }
     } catch (err) {
       console.log(err);
       setMessage("The email address or password is incorrect");
-
     }
   };
 
   return (
     <div className="container">
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={email}
-          placeholder="Email"
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          value={password}
-          placeholder="Password"
-          onChange={(e) => setPassword(e.target.value)}
-        />
+      <Form onSubmit={handleSubmit}>
+        <Form.Group
+          as={Row}
+          className="mb-3"
+          controlId="exampleForm.ControlInput1"
+        >
+          <Form.Label column sm="4">
+            Email address
+          </Form.Label>
 
-        <button type="submit">Login</button>
+          <Col sm="8">
+            <Form.Control
+              type="email"
+              placeholder="name@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </Col>
+        </Form.Group>
+        <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
+          <Form.Label column sm="4">
+            Password
+          </Form.Label>
+          <Col sm="8">
+            <Form.Control
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Col>
+        </Form.Group>
 
-        <div className="message">{message ? <p>{message}</p> : null}</div>
-        <span onClick={() => navigate("/registration")}>
-          Dont have an account?
-        </span>
-      </form>
+        <Col sm="5">
+          {message ? (
+            <Alert className="message" variant="danger">
+              <p>{message}</p>
+            </Alert>
+          ) : null}
+        </Col>
+        <div className="button-container">
+          <Button className="button-form" type="submit" variant="dark">
+            Login
+          </Button>
+          <br />
+    
+          <Button
+            className="button-form"
+            variant="outline-secondary"
+            onClick={() => navigate("/registration")}
+          >
+            Dont have an account?
+          </Button>
+        </div>
+      </Form>
     </div>
   );
 }

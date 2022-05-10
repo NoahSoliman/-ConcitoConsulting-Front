@@ -64,7 +64,6 @@ function Companies(props) {
     // "Soliditet",
   ]);
 
-
   let navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -170,13 +169,29 @@ function Companies(props) {
 
   // ------------------------------------------------------------------------------
 
-  let sendData = () => {
-    console.log(reducerState.customerBranchChoice);
+  let sendData = async () => {
+    // console.log(reducerState.customerBranchChoice);
+    // console.log(reducerState.customerOptions);
 
-    
+    try {
+      const res = await axios.post(
+        `http://localhost:3000/api/company/result`,
+
+        {
+          test: "test",
+          customerBranchChoice: reducerState.customerBranchChoice,
+          customerOptions: reducerState.customerOptions,
+        },
+        { withCredentials: true }
+      );
+
+      if (res.statusText === "OK") {
+        console.log(res);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
-
-
 
   return (
     <div>
@@ -193,20 +208,20 @@ function Companies(props) {
       <br />
       <br />
       <button type="button" onClick={sendData}>
-      Skicka
+        Skicka
       </button>
       <div className="pagination-container">
-      <div>
-      <Pagination>
-        {/* <Pagination.First /> */}
-        <Pagination.Prev onClick={prevPage} />
-        {/* <Pagination.Ellipsis /> */}
-        {itemsState}
-        {/* <Pagination.Ellipsis /> */}
-        <Pagination.Next onClick={nextPage} />
-        {/* <Pagination.Last /> */}
-      </Pagination>
-      </div>
+        <div>
+          <Pagination>
+            {/* <Pagination.First /> */}
+            <Pagination.Prev onClick={prevPage} />
+            {/* <Pagination.Ellipsis /> */}
+            {itemsState}
+            {/* <Pagination.Ellipsis /> */}
+            <Pagination.Next onClick={nextPage} />
+            {/* <Pagination.Last /> */}
+          </Pagination>
+        </div>
       </div>
 
       <div>
@@ -214,14 +229,13 @@ function Companies(props) {
           <thead>
             <tr>
               <th>#</th>
-              {allTaHead.map((title) => (
-                <th >{title}</th>
+              {allTaHead.map((title, index) => (
+                <th key={index}>{title}</th>
               ))}
             </tr>
           </thead>
           <tbody>
-             <PageCompaniesState allCompanies={allCompanies} /> 
-         
+            <PageCompaniesState allCompanies={allCompanies} />
           </tbody>
         </Table>
       </div>

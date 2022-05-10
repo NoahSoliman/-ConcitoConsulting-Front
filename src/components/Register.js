@@ -1,6 +1,7 @@
 import "./Register.css";
 import { useState ,useEffect} from "react";
 import { Routes, Route, Link ,useNavigate } from "react-router-dom";
+import { Alert, Form, Col, Row, Button } from "react-bootstrap/";
 
 function Register() {
   const [name, setName] = useState("");
@@ -73,38 +74,99 @@ function Register() {
 
   return (
     <div className="container">
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={name}
-          placeholder="Name"
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type="text"
-          value={email}
-          placeholder="Email"
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          value={password}
-          placeholder="Password"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <input
-          type="password"
-          value={repeatPassword}
-          placeholder="Repeat Password"
-          onChange={(e) => setRepeatPassword(e.target.value)}
-        />
 
-        <button type="submit">Create</button>
 
-        <div className="message">{message ? <p>{message}</p> : null}</div>
-      <span onClick={() => navigate("/login")}>Do You have an account?</span>
+
+<Form className="form-container" onSubmit={handleSubmit}>
+        <Form.Group
+          as={Row}
+          className="mb-4"
+          controlId="exampleForm.ControlInput1"
+        >
+    <Form.Label column sm="4" >
+    Name
+          </Form.Label>
+          <Col sm="8">
+            <Form.Control
+              type="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              />
+          </Col>
+        </Form.Group>
+
+
+
+        <Form.Group
+          as={Row}
+          className="mb-3"
+          controlId="exampleForm.ControlInput1"
+        >
+    <Form.Label column sm="4">
+    Email address
+          </Form.Label>
+          <Col sm="8">
+            <Form.Control
+            type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              />
+          </Col>
+        </Form.Group>
+
+
+        <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
+          <Form.Label column sm="4">
+            Password
+          </Form.Label>
+          <Col sm="8">
+            <Form.Control
+              type="password"
+              value={password}
+ onChange={(e) => setPassword(e.target.value)}            />
+          </Col>
+        </Form.Group>
+
+        <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
+          <Form.Label column sm="4">
+          Repeat Password
+                    </Form.Label>
+          <Col sm="8">
+            <Form.Control
+              type="password"
+              value={repeatPassword}
+              onChange={(e) => setRepeatPassword(e.target.value)}
+              />
+          </Col>
+        </Form.Group>
+
+
+
         
-      </form>
+
+        {message ?
+          <Alert  className="message" size="10"  variant="warning">
+     <p>{message}</p> 
+          </Alert>
+          : null}
+
+          <div  className= "button-container"> 
+
+        <Button  className= "button-form" type="submit" variant="dark">
+        Create
+        </Button>
+        <br />
+
+     
+        <Button className= "button-form"
+          variant="outline-secondary"
+          onClick={() => navigate("/login")}
+        >
+         Do You have an account?
+        </Button>
+
+        </div>
+      </Form>
 
    
 

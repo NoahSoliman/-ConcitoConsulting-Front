@@ -6,7 +6,15 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
-import { Form, Pagination, PageItem, Table, InputGroup } from "react-bootstrap";
+import {
+  Form,
+  Pagination,
+  PageItem,
+  Table,
+  InputGroup,
+  Button,
+  Alert,
+} from "react-bootstrap";
 import CheckOptions from "./CheckOptions";
 import PageCompaniesState from "./PageCompaniesState";
 
@@ -27,9 +35,10 @@ function Companies(props) {
   const [maxNum, setMaxNum] = useState(10);
   const [totalPage, setTotalPage] = useState("");
   const [allCompanies, setAllCompanies] = useState([]);
+  const [show, setShow] = useState(false);
   const [allTaHead, setAllTaHead] = useState([
     // "OrganizationOrgnr",
-    "OrganizationName",
+    "Organization Name",
     "Bearbeta ej",
     "PRIO",
     "Ev. Not till Concito",
@@ -39,12 +48,12 @@ function Companies(props) {
     // "OrganizationCity",
     // "OrganizationRegion",
     // "OrganizationTelefon",
-    "OrganizationWeb",
+    "Org. Web",
     // "OrganizationMail",
-    "OrganizationBransch",
+    "Org. Bransch",
     // "OrganizationSNI1",
-    "OrganizationEmployees",
-    "OrganizationTurnover",
+    "Org. Employees",
+    "Org. Turnover",
     "Moderbolag",
     // "RegNumberOfDigits",
     // "SNI2Numbers",
@@ -187,32 +196,67 @@ function Companies(props) {
 
       if (res.statusText === "OK") {
         console.log(res);
+        setShow(true)
+ 
       }
     } catch (err) {
       console.log(err);
+
+      alert("Vi har ett problem just nu med server! Försök gärna efter en stund!")
     }
   };
 
   return (
     <div>
-      <h1>Companies</h1>
-      <button
-        type="button"
-        onClick={() => {
-          localStorage.removeItem("Logins State");
-          navigate("/login");
-        }}
-      >
-        Logout
-      </button>
-      <br />
-      <br />
-      <button type="button" onClick={sendData}>
-        Skicka
-      </button>
+      <header className="header">
+        <h1>Companies</h1>
+        <div className="button-container">
+          <Button
+            type="button"
+            className="button-form"
+            onClick={() => {
+              localStorage.removeItem("Logins State");
+              navigate("/login");
+            }}
+            variant="outline-light"
+          >
+            Logout
+          </Button>
+          <Button
+            variant="outline-light"
+            type="button"
+            className="button-form"
+            onClick={() => {
+              navigate("/company");
+            }}
+          >
+            Gå tillbaka till Branschöversikt!
+          </Button>
+        </div>
+      </header>
+
+    
+      <Alert show={show} variant="success" style={{padding:"100px"  }}>
+        <Alert.Heading>Vi har fått dina val nu! </Alert.Heading>
+        <p>
+        Vill du göra några ändringar eller bara dubbelkolla det du har skickat till oss? klick gärna då på knappen ändra mina val. Tack!
+        </p>
+        <hr />
+        <div className="d-flex justify-content-end">
+          <Button onClick={() => setShow(false)} variant="outline-success">
+          Ändra mina val! 
+          </Button>
+        </div>
+      </Alert>
+      
+
+      {!show && <>
       <div className="pagination-container">
-        <div>
-          <Pagination>
+        <div className="companies-container">
+          <Button type="button" onClick={sendData} className="button-form">
+            Skicka dina val!
+          </Button>
+          <Pagination className="Pagination">
             {/* <Pagination.First /> */}
             <Pagination.Prev onClick={prevPage} />
             {/* <Pagination.Ellipsis /> */}
@@ -225,20 +269,39 @@ function Companies(props) {
       </div>
 
       <div>
-        <Table responsive striped bordered hover size="sm">
-          <thead>
+        <Table className="table-responsive " responsive striped bordered hover>
+          <thead  className="th-contanier">
             <tr>
               <th>#</th>
               {allTaHead.map((title, index) => (
-                <th key={index}>{title}</th>
+                <th className="th-title" key={index}>{title}</th>
               ))}
             </tr>
           </thead>
+
           <tbody>
             <PageCompaniesState allCompanies={allCompanies} />
           </tbody>
         </Table>
       </div>
+
+      <div className="pagination-container">
+        <div className="companies-container">
+          <Button type="button" onClick={sendData} className="button-form">
+            Skicka dina val!
+          </Button>
+          <Pagination className="Pagination">
+            {/* <Pagination.First /> */}
+            <Pagination.Prev onClick={prevPage} />
+            {/* <Pagination.Ellipsis /> */}
+            {itemsState}
+            {/* <Pagination.Ellipsis /> */}
+            <Pagination.Next onClick={nextPage} />
+            {/* <Pagination.Last /> */}
+          </Pagination>
+        </div>
+      </div>
+      </>}
     </div>
   );
 }

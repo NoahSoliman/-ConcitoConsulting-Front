@@ -3,8 +3,10 @@ import { useState, useEffect } from "react";
 // import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
-import Form from "react-bootstrap/Form";
+// import Form from "react-bootstrap/Form";
 import { useSelector, useDispatch } from "react-redux";
+import "./company.css";
+import { Alert, Form, Col, Row, Button } from "react-bootstrap/";
 
 import {
   selectedPage,
@@ -59,11 +61,16 @@ function Company() {
   }, [oldData]);
 
   let sendData = async () => {
+
+    if (customerChoice.length) {
     dispatch(setCustomerBranchChoice(customerChoice));
     dispatch(selectedPage(1));
     navigate(`/companies/${1}`);
+  } else {
 
-   
+
+    alert("Du behöver välja minst en bransch! Tack!")
+  }
   };
 
   function toggleAll(source) {
@@ -142,67 +149,108 @@ function Company() {
   }
 
   return (
-    <div>
-      <h1> company</h1>
-      <button type="button" onClick={sendData}>
-        Sök företag inom markerade branscher
-      </button>
-      <Form.Check
-        type={"checkbox"}
-        id={"selectAll"}
-        label="Select All"
-        style={{ marginBottom: 20, marginTop: 40, fontWeight: "bold" }}
-        onClick={(e) => toggleAll(e.target)}
-      />
-      {DBdata.map(({ Denomination, branch, SNI2Digits, SNI3Digits }, index) => {
-        return (
-          <Form key={index}>
-            {Denomination ? (
-              <Form.Check
-                type={"checkbox"}
-                id={SNI2Digits}
-                label={Denomination}
-                value={SNI2Digits}
-                onClick={(e) => toggle(e.target, SNI2Digits)}
-              />
-            ) : (
-              ""
-            )}
-            {branch ? (
-              <Form.Check
-                className={SNI3Digits.toString().slice(0, -1)}
-                type={"checkbox"}
-                id={SNI3Digits}
-                label={branch}
-                name={"selectAll"}
-                value={SNI3Digits}
-                style={{ marginLeft: 50, display: "none" }}
-                onClick={(e) => checkHandle(e.target)}
-              />
-            ) : (
-              ""
-            )}
-          </Form>
-        );
-      })}
-      <br />
+    <div className="company-container">
+      <header className="header">
+        <h1> Branschöversikt</h1>
+        <Button
+          className="button-form"
+          type="button"
+          onClick={() => {
+            localStorage.removeItem("Logins State");
+            navigate("/login");
+          }}
+          variant="outline-light"
+        >
+          Logout
+        </Button>
+      </header>
+      <div className="company-body">
+        <Button type="button" onClick={sendData} className="button-form">
+          Sök företag inom markerade branscher
+        </Button>
+        <Form.Check
+          type={"checkbox"}
+          id={"selectAll"}
+          label="Select All"
+          style={{
+            marginBottom: 20,
+            marginTop: 40,
+            fontWeight: "700",
+            color: "rgb(16, 67, 118)",
+            fontSize: "20px",
+          }}
+          onClick={(e) => toggleAll(e.target)}
+        />
+        {DBdata.map(
+          ({ Denomination, branch, SNI2Digits, SNI3Digits }, index) => {
+            return (
+              <Form key={index}>
+                {Denomination ? (
+                  <Form.Check
+                    type={"checkbox"}
+                    id={SNI2Digits}
+                    label={Denomination}
+                    value={SNI2Digits}
+                    style={{
+                      marginBottom: 20,
+                      marginTop: 20,
+                      fontWeight: "700",
+                      color: "rgb(16, 67, 118)",
+                      fontSize: "20px",
+                    }}
+                    onClick={(e) => toggle(e.target, SNI2Digits)}
+                  />
+                ) : (
+                  ""
+                )}
+                {branch ? (
+                  <Form.Check
+                    className={SNI3Digits.toString().slice(0, -1)}
+                    type={"checkbox"}
+                    id={SNI3Digits}
+                    label={branch}
+                    name={"selectAll"}
+                    value={SNI3Digits}
+                    style={{
+                      marginLeft: 50,
+                      display: "none",
+                      marginBottom: 20,
+                      marginTop: 20,
+                      fontWeight: "400",
+                      color: "rgb(16, 67, 118)",
+                      fontSize: "20px",
+                    }}
+                    onClick={(e) => checkHandle(e.target)}
+                  />
+                ) : (
+                  ""
+                )}
+              </Form>
+            );
+          }
+        )}
+        <br />
 
-      <button type="button" onClick={sendData}>
-        Sök företag inom markerade branscher
-      </button>
-      <br />
-      <br />
-      <br />
+        <div className="button-container"> 
+          <Button className="button-form" type="button" onClick={sendData}>
+            Sök företag inom markerade branscher
+          </Button>
+          <br />
+          <br />
 
-      <button
-        type="button"
-        onClick={() => {
-          localStorage.removeItem("Logins State");
-          navigate("/login");
-        }}
-      >
-        Logout
-      </button>
+          <Button
+            className="button-form"
+            variant="secondary"
+            type="button"
+            onClick={() => {
+              localStorage.removeItem("Logins State");
+              navigate("/login");
+            }}
+          >
+            Logout
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

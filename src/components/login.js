@@ -58,7 +58,7 @@ function Register() {
 
   return (
     <div className="container">
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} className="form-container ">
         <Form.Group
           as={Row}
           className="mb-3"
@@ -99,7 +99,7 @@ function Register() {
           ) : null}
         </Col>
         <div className="button-container">
-          <Button className="button-form" type="submit" variant="dark">
+          <Button className="button-form" type="submit" variant="success">
             Login
           </Button>
           <br />

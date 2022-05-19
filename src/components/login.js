@@ -109,7 +109,7 @@ function Register() {
             variant="outline-secondary"
             onClick={() => navigate("/registration")}
           >
-            Dont have an account?
+            Don't have an account?
           </Button>
         </div>
       </Form>

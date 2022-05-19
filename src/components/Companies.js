@@ -196,13 +196,14 @@ function Companies(props) {
 
       if (res.statusText === "OK") {
         console.log(res);
-        setShow(true)
- 
+        setShow(true);
       }
     } catch (err) {
       console.log(err);
 
-      alert("Vi har ett problem just nu med server! Försök gärna efter en stund!")
+      alert(
+        "Vi har ett problem just nu med server! Försök gärna efter en stund!"
+      );
     }
   };
 
@@ -235,73 +236,84 @@ function Companies(props) {
         </div>
       </header>
 
-    
-      <Alert show={show} variant="success" style={{padding:"100px"  }}>
-        <Alert.Heading>Vi har fått dina val nu! </Alert.Heading>
-        <p>
-        Vill du göra några ändringar eller bara dubbelkolla det du har skickat till oss? klick gärna då på knappen ändra mina val. Tack!
-        </p>
-        <hr />
-        <div className="d-flex justify-content-end">
-          <Button onClick={() => setShow(false)} variant="outline-success">
-          Ändra mina val! 
-          </Button>
+      <Alert show={show} variant="success" style={{ padding: "100px" }}>
+        <div className="company-body">
+          <Alert.Heading>Vi har fått dina val nu! </Alert.Heading>
+          <p>
+            Vill du göra några ändringar eller bara dubbelkolla det du har
+            skickat till oss? klick gärna då på knappen ändra mina val. Tack!
+          </p>
+          <hr />
+          <div className="d-flex justify-content-end">
+            <Button onClick={() => setShow(false)} variant="outline-success">
+              Ändra mina val!
+            </Button>
+          </div>
         </div>
       </Alert>
-      
 
-      {!show && <>
-      <div className="pagination-container">
-        <div className="companies-container">
-          <Button type="button" onClick={sendData} className="button-form">
-            Skicka dina val!
-          </Button>
-          <Pagination className="Pagination">
-            {/* <Pagination.First /> */}
-            <Pagination.Prev onClick={prevPage} />
-            {/* <Pagination.Ellipsis /> */}
-            {itemsState}
-            {/* <Pagination.Ellipsis /> */}
-            <Pagination.Next onClick={nextPage} />
-            {/* <Pagination.Last /> */}
-          </Pagination>
-        </div>
-      </div>
+      {!show && (
+        <>
+          <div className="pagination-container">
+            <div className="companies-container">
+              <Button type="button" onClick={sendData} className="button-form">
+                Skicka dina val!
+              </Button>
+              <Pagination className="Pagination">
+                {/* <Pagination.First /> */}
+                <Pagination.Prev onClick={prevPage} />
+                {/* <Pagination.Ellipsis /> */}
+                {itemsState}
+                {/* <Pagination.Ellipsis /> */}
+                <Pagination.Next onClick={nextPage} />
+                {/* <Pagination.Last /> */}
+              </Pagination>
+            </div>
+          </div>
 
-      <div>
-        <Table className="table-responsive " responsive striped bordered hover>
-          <thead  className="th-contanier">
-            <tr>
-              <th>#</th>
-              {allTaHead.map((title, index) => (
-                <th className="th-title" key={index}>{title}</th>
-              ))}
-            </tr>
-          </thead>
+          <div>
+            <Table
+              className="table-responsive "
+              responsive
+              striped
+              bordered
+              hover
+            >
+              <thead className="th-contanier">
+                <tr>
+                  <th>#</th>
+                  {allTaHead.map((title, index) => (
+                    <th className="th-title" key={index}>
+                      {title}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
 
-          <tbody>
-            <PageCompaniesState allCompanies={allCompanies} />
-          </tbody>
-        </Table>
-      </div>
+              <tbody>
+                <PageCompaniesState allCompanies={allCompanies} />
+              </tbody>
+            </Table>
+          </div>
 
-      <div className="pagination-container">
-        <div className="companies-container">
-          <Button type="button" onClick={sendData} className="button-form">
-            Skicka dina val!
-          </Button>
-          <Pagination className="Pagination">
-            {/* <Pagination.First /> */}
-            <Pagination.Prev onClick={prevPage} />
-            {/* <Pagination.Ellipsis /> */}
-            {itemsState}
-            {/* <Pagination.Ellipsis /> */}
-            <Pagination.Next onClick={nextPage} />
-            {/* <Pagination.Last /> */}
-          </Pagination>
-        </div>
-      </div>
-      </>}
+          <div className="pagination-container">
+            <div className="companies-container">
+              <Button type="button" onClick={sendData} className="button-form">
+                Skicka dina val!
+              </Button>
+              <Pagination className="Pagination">
+                {/* <Pagination.First /> */}
+                <Pagination.Prev onClick={prevPage} />
+                {/* <Pagination.Ellipsis /> */}
+                {itemsState}
+                {/* <Pagination.Ellipsis /> */}
+                <Pagination.Next onClick={nextPage} />
+                {/* <Pagination.Last /> */}
+              </Pagination>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
